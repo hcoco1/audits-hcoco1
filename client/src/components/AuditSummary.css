@@ -1,0 +1,22 @@
+.audit-summary-container {
+    display: flex;
+    justify-content: space-around; /* Adjust as needed */
+    margin-bottom: 20px; /* Optional: Add margin between tables */
+  }
+  
+  .audit-summary-table {
+    border-collapse: collapse;
+    width: 30%; /* Adjust the width of each table */
+  }
+  
+  .audit-summary-table th,
+  .audit-summary-table td {
+    border: 1px solid #141414;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .audit-summary-table th {
+    background-color: #9ea6d6;
+  }
+  

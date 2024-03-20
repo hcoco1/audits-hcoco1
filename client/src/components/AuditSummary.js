@@ -1,4 +1,5 @@
 import React from 'react';
+import './AuditSummary.css';
 
 
 const AuditSummary = ({ audits }) => {
