@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import AuditTable from './AuditTable';
 import AuditForm from './AuditForm';
+import AuditorNameForm from './AuditorNameForm';
+
 
 function App() {
+  const [auditorName, setAuditorName] = useState('');
+  const [isEditingName, setIsEditingName] = useState(false);
   const [audits, setAudits] = useState([]);
   const [newAudit, setNewAudit] = useState({
     username: '',
@@ -96,9 +100,27 @@ function App() {
     }
   };
 
+  const handleNameSubmit = (submittedName) => {
+    setAuditorName(submittedName);
+    setIsEditingName(false); // Hide the form after submission
+  };
+
+  const editName = () => {
+    setIsEditingName(true); // Show the form to edit the name
+  };
+
   return (
     <div className="App">
       <h1>Audits</h1>
+      {isEditingName || !auditorName ? (
+        <AuditorNameForm onNameSubmit={handleNameSubmit} />
+      ) : (
+        <div>
+          Auditor's Name: {auditorName}
+          <button onClick={editName} style={{marginLeft: "10px"}}>Edit Name</button>
+        </div>
+      )}
+
       {editingId ? (
         <AuditForm
           auditData={editFormData}
