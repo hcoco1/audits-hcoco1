@@ -20,7 +20,7 @@ function AuditTableRow({ audit, isEditing, handleEditFormChange, startEditing, s
           <td>{audit.error}</td>
           <td>{audit.durable}</td>
           <td>
-            <button onClick={() => startEditing(audit.id)}>Edit</button>
+            <button onClick={() => startEditing(audit)}>Edit</button>
             <button onClick={() => deleteAudit(audit.id)}>Delete</button>
           </td>
         </>

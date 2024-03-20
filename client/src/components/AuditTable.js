@@ -18,15 +18,16 @@ function AuditTable({ audits, isEditingId, handleEditFormChange, startEditing, s
       <tbody>
         {audits.map((audit) => (
           <AuditTableRow
-            key={audit.id}
-            audit={audit}
-            isEditing={isEditingId === audit.id}
-            handleEditFormChange={handleEditFormChange}
-            startEditing={startEditing}
-            saveEdit={saveEdit}
-            cancelEdit={cancelEdit}
-            deleteAudit={deleteAudit}
-          />
+  key={audit.id}
+  audit={audit}
+  isEditing={isEditingId === audit.id}
+  handleEditFormChange={handleEditFormChange}
+  startEditing={startEditing}
+  saveEdit={saveEdit}
+  cancelEdit={cancelEdit}
+  deleteAudit={deleteAudit}
+/>
+
         ))}
       </tbody>
     </table>
