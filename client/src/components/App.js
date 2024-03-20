@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import AuditForm from './AuditForm';
+import AuditTable from './AuditTable';
+import AuditSummary from './AuditSummary';
 
 function App() {
   const [audits, setAudits] = useState([]);
@@ -93,163 +96,32 @@ function App() {
       await fetchAudits();
     }
   };
-  
+
+
+
   return (
     <div className="App">
       <h1>Audits</h1>
-      <form onSubmit={addAudit}>
-        <div className="form-row">
-          <input
-            name="username"
-            placeholder="Username"
-            value={newAudit.username}
-            onChange={handleInputChange}
-          />
-  
-          <select
-            name="afe"
-            value={newAudit.afe}
-            onChange={handleInputChange}
-          >
-            <option value="">AFE</option>
-            <option value="AFE1">AFE1</option>
-            <option value="AFE2">AFE2</option>
-          </select>
-  
-          <select
-            name="processPath"
-            value={newAudit.processPath}
-            onChange={handleInputChange}
-          >
-            <option value="">Process</option>
-            <option value="Pack">Pack</option>
-            <option value="Induct">Induct</option>
-            <option value="Rebin">Rebin</option>
-            <option value="Pack-other">Pack-other</option>
-            <option value="Smartpac">Smartpac</option>
-          </select>
-  
-          <select
-            name="error"
-            value={newAudit.error}
-            onChange={handleInputChange}
-          >
-            <option value="">Error</option>
-            <option value="Error Indicator">Error Indicator</option>
-            <option value="Shortage">Shortage</option>
-            <option value="Wrong Box">Wrong Box</option>
-            <option value="Slam Kickout">Slam Kickout</option>
-            <option value="Missing Item">Missing Item</option>
-            <option value="Damaged">Damaged</option>
-            <option value="Unscannable">Unscannable</option>
-          </select>
-  
-          <textarea
-            name="durable"
-            placeholder="Audit"
-            value={newAudit.durable}
-            onChange={handleInputChange}
-            rows="2"
-          />
-        </div>
-  
-        <button type="submit">Add Audit</button>
-      </form>
-  
-      <table>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>AFE</th>
-            <th>Process Path</th>
-            <th>Error</th>
-            <th>Durable</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {audits.map(audit => (
-            <tr key={audit.id}>
-              {editingId === audit.id ? (
-                <td colSpan="6">
-                  <form onSubmit={(e) => saveEdit(e, audit.id)}>
-                    {/* Edit form fields with Save and Cancel buttons */}
-                    <input
-                      name="username"
-                      placeholder="Username"
-                      value={editFormData.username}
-                      onChange={handleEditFormChange}
-                    />
-                              <select
-            name="afe"
-            value={newAudit.afe}
-            onChange={handleInputChange}
-          >
-            <option value="">AFE</option>
-            <option value="AFE1">AFE1</option>
-            <option value="AFE2">AFE2</option>
-          </select>
-  
-          <select
-            name="processPath"
-            value={newAudit.processPath}
-            onChange={handleInputChange}
-          >
-            <option value="">Process</option>
-            <option value="Pack">Pack</option>
-            <option value="Induct">Induct</option>
-            <option value="Rebin">Rebin</option>
-            <option value="Pack-other">Pack-other</option>
-            <option value="Smartpac">Smartpac</option>
-          </select>
-  
-          <select
-            name="error"
-            value={newAudit.error}
-            onChange={handleInputChange}
-          >
-            <option value="">Error</option>
-            <option value="Error Indicator">Error Indicator</option>
-            <option value="Shortage">Shortage</option>
-            <option value="Wrong Box">Wrong Box</option>
-            <option value="Slam Kickout">Slam Kickout</option>
-            <option value="Missing Item">Missing Item</option>
-            <option value="Damaged">Damaged</option>
-            <option value="Unscannable">Unscannable</option>
-          </select>
-                    <textarea
-                      name="durable"
-                      placeholder="Audit Details"
-                      value={editFormData.durable}
-                      onChange={handleEditFormChange}
-                      rows="2"
-                    />
-                    <button type="submit">Save</button>
-                    <button onClick={() => setEditingId(null)}>Cancel</button>
-                  </form>
-                </td>
-              ) : (
-                <>
-                  {/* Audit details */}
-                  <td>{audit.username}</td>
-                  <td>{audit.afe}</td>
-                  <td>{audit.processPath}</td>
-                  <td>{audit.error}</td>
-                  <td>{audit.durable}</td>
-                  {/* Edit and Delete buttons */}
-                  <td>
-                    <button onClick={() => startEditing(audit)}>Edit</button>
-                    <button onClick={() => deleteAudit(audit.id)}>Delete</button>
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <AuditSummary audits={audits} />
+      <AuditForm
+        newAudit={newAudit}
+        handleInputChange={handleInputChange}
+        addAudit={addAudit}
+      />
+      <AuditTable
+        audits={audits}
+        editingId={editingId}
+        startEditing={startEditing}
+        saveEdit={saveEdit}
+        editFormData={editFormData}
+        handleEditFormChange={handleEditFormChange}
+        deleteAudit={deleteAudit}
+        setEditingId={setEditingId} // Pass setEditingId as a prop
+      />
     </div>
   );
 }
 
 export default App;
+
 
