@@ -9,17 +9,17 @@ function App() {
   const [newAudit, setNewAudit] = useState({
     username: '',
     afe: '',
-    processPath: '',
-    error: '',
-    durable: ''
+    process_path: '',
+    error_message: '',
+    is_durable : ''
   });
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
     username: '',
     afe: '',
-    processPath: '',
-    error: '',
-    durable: ''
+    process_path: '',
+    error_message: '',
+    is_durable : ''
   });
 
   const fetchAudits = async () => {
@@ -61,9 +61,9 @@ function App() {
       setEditFormData({
         username: '',
         afe: '',
-        processPath: '',
-        error: '',
-        durable: ''
+        process_path: '',
+        error_message: '',
+        is_durable : ''
       });
       await fetchAudits();
     }
@@ -80,9 +80,9 @@ function App() {
       setNewAudit({
         username: '',
         afe: '',
-        processPath: '',
-        error: '',
-        durable: ''
+        process_path: '',
+        error_message: '',
+        is_durable : ''
       });
       await fetchAudits();
     }

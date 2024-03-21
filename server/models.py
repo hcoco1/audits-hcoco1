@@ -9,17 +9,16 @@ class Audit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100))
     afe = db.Column(db.String(50))
-    process_path = db.Column(db.String(100))
-    error_message = db.Column(db.String(100))
-    is_durable = db.Column(db.Boolean, default=None)
+    process_path = db.Column(db.String(255))  # Adjusted length
+    error_message = db.Column(db.String(255))  # Adjusted length
+    is_durable = db.Column(db.String(255)) 
     date = db.Column(db.DateTime, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)  # Added index
 
     user = db.relationship('User', backref=db.backref('audits', lazy=True))
 
     def __repr__(self):
-        return f"<Audit {self.username}>"
-
+        return f"<Audit {self.id}: {self.username}>"
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,3 +35,7 @@ class User(UserMixin, db.Model):
 
     def check_password(self, plaintext_password):
         return bcrypt.check_password_hash(self._password, plaintext_password)
+    
+    def __repr__(self):
+        return f"<User {self.username}>"
+

@@ -1,3 +1,4 @@
+# server/config.py
 # Standard library imports
 
 # Remote library imports
@@ -34,4 +35,6 @@ db.init_app(app)
 api = Api(app)
 
 # Instantiate CORS
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+# Instantiate CORS for all routes and allow all origins
+CORS(app, resources={r"/*": {"origins": "*"}})
+
