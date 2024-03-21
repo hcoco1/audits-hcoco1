@@ -1,18 +1,31 @@
 #!/usr/bin/env python3
 
 # Standard library imports
-from flask import request, redirect, url_for, render_template, flash, jsonify, session
+from flask import request, jsonify, session
 # Remote library imports
 from flask_restful import Resource, reqparse, fields, marshal_with
-from flask_login import login_user, logout_user, current_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 # Local imports
 from config import app, db, api
 # Add your model imports
+from flask_login import LoginManager
+import os
+from dotenv import load_dotenv
 
 
 
 # Views go here!
+load_dotenv()
+app.secret_key = os.getenv("SECRET_KEY")
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'  # The login view of your app
+    
+@login_manager.user_loader
+def load_user(user_id):
+        return User.query.get(int(user_id))
 
 @app.route('/')
 def index():
@@ -89,47 +102,43 @@ class AuditResource(Resource):
 api.add_resource(AuditResource, '/audits', '/audits/<int:audit_id>')
 
 
-@app.route('/signup', methods=['POST'])
-def signup():
-    data = request.get_json()  # Get data sent from the frontend
-    username = data.get('username')
-    password = data.get('password')
-    
-    if User.query.filter_by(username=username).first():
-        return jsonify({'error': 'Username already exists.'}), 409
-    
-    user = User(username=username)
-    user.set_password(password)  # Hash the password and store it
-    
-    db.session.add(user)
-    db.session.commit()
-    
-    login_user(user)  # Optionally log the user in immediately after signing up
-    
-    return jsonify({'message': 'User successfully registered.'}), 201
-
-
-
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
     user = User.query.filter_by(username=username).first()
-    
     if user and user.check_password(password):
         login_user(user)
-        return jsonify({'message': 'Login successful.'}), 200
-    
-    return jsonify({'error': 'Invalid username or password.'}), 401
-
+        return jsonify({'message': 'Logged in successfully'}), 200
+    return jsonify({'message': 'Invalid username or password'}), 401
 
 
 @app.route('/logout', methods=['POST'])
+@login_required
 def logout():
-    logout_user()  # Logout user using Flask-Login
-    session.clear()  # Clear session data
-    return jsonify({'message': 'User successfully logged out.'}), 200
+    logout_user()
+    return jsonify({'message': 'Logged out successfully'}), 200
+
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        return jsonify({'message': 'Username already exists. Please choose a different one'}), 400
+    new_user = User(username=username)
+    new_user.password = password  # Password will be automatically hashed
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message': 'Account created successfully. Please log in'}), 201
+
+
+
+
+
 
 
 
